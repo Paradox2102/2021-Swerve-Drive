@@ -44,6 +44,11 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
+    swerve.resetGyro();
+  }
+
+  public void drive(double forward, double strafe, double yaw) {
+    swerve.drive(forward, strafe, yaw, true);
   }
 
   @Override

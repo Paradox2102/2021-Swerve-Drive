@@ -6,7 +6,6 @@ package frc.robot;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import org.strykeforce.swerve.SwerveModule;
 
@@ -36,9 +35,9 @@ public class WheelWrapper implements SwerveModule {
     }
 
     public void setWheelAngle(double angle) {
-        if(angle > getState().angle.getDegrees()%360) {
+        if(normalize(getState().angle.getDegrees()%360 - angle) < 0) {
             m_angleMotor.set(0.5);
-        } else if (angle < getState().angle.getDegrees()%360) {
+        } else if (normalize(getState().angle.getDegrees() % 360 - angle) > 0) {
             m_angleMotor.set(-0.5);
         } else {
             m_angleMotor.set(0);
@@ -47,6 +46,10 @@ public class WheelWrapper implements SwerveModule {
 
     public void setSpeed(double speed) {
         m_driveMotor.set(speed / 60 / Constants.k_RPStoMPS);
+    }
+
+    public double normalize(double value) {
+        return (value+180)%360-180;
     }
 
     @Override

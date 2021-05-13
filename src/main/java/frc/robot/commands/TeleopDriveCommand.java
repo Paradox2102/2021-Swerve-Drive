@@ -38,6 +38,8 @@ public class TeleopDriveCommand extends CommandBase {
     double forward = deadband(m_forward.getAsDouble());
     double strafe = deadband(m_strafe.getAsDouble());
     double yaw = deadband(m_yaw.getAsDouble());
+
+    m_driveSubsystem.drive(-forward, -strafe, -yaw);
   }
 
   // Called once the command ends or is interrupted.
