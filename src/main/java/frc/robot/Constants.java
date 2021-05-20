@@ -20,11 +20,14 @@ public final class Constants {
     public static double k_robotLength = 1.0;
     public static double k_robotWidth = 1.0;
 
+    public static double k_maxSpeed = 0.0;
+
     // Wheel locations
     public static Translation2d k_TLLocation = new Translation2d(0, 0);
     public static Translation2d k_TRLocation = new Translation2d(0, 0);
     public static Translation2d k_BLLocation = new Translation2d(0, 0);
     public static Translation2d k_BRLocation = new Translation2d(0, 0);
 
+    // Local Conversions
     public static double k_RPStoMPS = 1.0;
 }

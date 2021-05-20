@@ -51,6 +51,13 @@ public class DriveSubsystem extends SubsystemBase {
     swerve.drive(forward, strafe, yaw, true);
   }
 
+  public void setPower(double power) {
+    m_TLDriveMotor.set(power);
+    m_TRDriveMotor.set(power);
+    m_BLDriveMotor.set(power);
+    m_BRDriveMotor.set(power);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

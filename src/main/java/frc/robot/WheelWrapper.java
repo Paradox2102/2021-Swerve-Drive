@@ -22,8 +22,9 @@ public class WheelWrapper implements SwerveModule {
     CANEncoder m_angleEncoder;
 
     private double m_azimuthZero = 0.0;
+    private double k_deadZone = 1.0;
 
-    Translation2d m_location;// (distance from center, angle)
+    Translation2d m_location; // (distance from center, angle)
 
     public WheelWrapper(CANSparkMax driveMotor, CANSparkMax angleMotor, CANEncoder driveEncoder, CANEncoder angleEncoder, Translation2d location) {
         m_driveMotor = driveMotor;
@@ -35,9 +36,9 @@ public class WheelWrapper implements SwerveModule {
     }
 
     public void setWheelAngle(double angle) {
-        if(normalize(getState().angle.getDegrees()%360 - angle) < 0) {
+        if(getState().angle.getDegrees() % 360 - angle < k_deadZone) {
             m_angleMotor.set(0.5);
-        } else if (normalize(getState().angle.getDegrees() % 360 - angle) > 0) {
+        } else if (getState().angle.getDegrees() % 360 - angle > k_deadZone) {
             m_angleMotor.set(-0.5);
         } else {
             m_angleMotor.set(0);
@@ -48,13 +49,13 @@ public class WheelWrapper implements SwerveModule {
         m_driveMotor.set(speed / 60 / Constants.k_RPStoMPS);
     }
 
-    public double normalize(double value) {
-        return (value+180)%360-180;
-    }
+    // public double normalize(double value) {
+    //     return (value+180)%360-180;
+    // }
 
     @Override
     public double getMaxSpeedMetersPerSecond() {
-        return 0;
+        return Constants.k_maxSpeed;
     }
 
     @Override
@@ -81,11 +82,11 @@ public class WheelWrapper implements SwerveModule {
     @Override
     public void storeAzimuthZeroReference() {
         m_azimuthZero = m_angleEncoder.getPosition();
+        // SmartDashboard.putNumber("Azimuth Zero", m_angleEncoder.getPosition());
     }
 
     @Override
     public void loadAndSetAzimuthZeroReference() {
-        // TODO Auto-generated method stub
-        
+        // m_angleEncoder.setPosition(SmartDashboard.getNumber("Azimuth Zero", 0));
     }
 }
