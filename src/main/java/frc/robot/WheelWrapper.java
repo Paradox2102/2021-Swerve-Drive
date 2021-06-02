@@ -36,13 +36,28 @@ public class WheelWrapper implements SwerveModule {
     }
 
     public void setWheelAngle(double angle) {
-        if(getState().angle.getDegrees() % 360 - angle < k_deadZone) {
+        if(normalizeAngle(getState().angle.getDegrees() - angle) < k_deadZone) {
             m_angleMotor.set(0.5);
-        } else if (getState().angle.getDegrees() % 360 - angle > k_deadZone) {
+        } else if (normalizeAngle(getState().angle.getDegrees() - angle) > k_deadZone) {
             m_angleMotor.set(-0.5);
         } else {
             m_angleMotor.set(0);
         }
+    }
+
+    public double normalizeAngle(double angle) {
+        double a = angle % 360;
+
+        if (a > 180)
+        {
+            a -= 360;
+        }
+        else if (a < -180)
+        {
+            a += 360;
+        }
+
+        return a;
     }
 
     public void setSpeed(double speed) {
@@ -65,7 +80,7 @@ public class WheelWrapper implements SwerveModule {
 
     @Override
     public SwerveModuleState getState() {
-        return new SwerveModuleState(m_angleEncoder.getVelocity() * 60 * Constants.k_RPStoMPS, Rotation2d.fromDegrees(360*(m_angleEncoder.getPosition() - m_azimuthZero)));
+        return new SwerveModuleState(m_driveEncoder.getVelocity() * 60 * Constants.k_RPStoMPS, Rotation2d.fromDegrees(112/360*(m_angleEncoder.getPosition() - m_azimuthZero)));
     }
 
     @Override

@@ -20,7 +20,9 @@ public final class Constants {
     public static double k_robotLength = 1.0;
     public static double k_robotWidth = 1.0;
 
-    public static double k_maxSpeed = 0.0;
+    public static double k_maxSpeed = 20.0;
+
+    // Motor Values
 
     // Wheel locations
     public static Translation2d k_TLLocation = new Translation2d(0, 0);
