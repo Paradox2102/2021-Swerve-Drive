@@ -21,6 +21,6 @@ public class SetWheelAngleCommand extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_driveSubsystem.setAngle(45);
+    m_driveSubsystem.setAngle(90);
   }
 }

@@ -23,6 +23,9 @@ public class WheelWrapper implements SwerveModule {
 
     private double m_azimuthZero = 0.0;
     private double k_deadZone = 1.0;
+    private double m_angle = 0;
+
+    private double k_p = 0.01;
 
     Translation2d m_location; // (distance from center, angle)
 
@@ -35,14 +38,18 @@ public class WheelWrapper implements SwerveModule {
         m_location = location;
     }
 
-    public void setWheelAngle(double angle) {
-        if(normalizeAngle(getState().angle.getDegrees() - angle) < k_deadZone) {
-            m_angleMotor.set(0.5);
-        } else if (normalizeAngle(getState().angle.getDegrees() - angle) > k_deadZone) {
-            m_angleMotor.set(-0.5);
-        } else {
-            m_angleMotor.set(0);
+    public void periodic() {
+        double error = normalizeAngle(getState().angle.getDegrees() - m_angle);
+        double power = -error * k_p;
+        if (Math.abs(error) < k_deadZone) {
+            power = 0;
         }
+        m_angleMotor.set(power);
+        // System.out.println(error + " " + m_angle + " " + k_deadZone);
+    }
+
+    public void setWheelAngle(double angle) {
+        m_angle = angle;
     }
 
     public double normalizeAngle(double angle) {
@@ -80,7 +87,7 @@ public class WheelWrapper implements SwerveModule {
 
     @Override
     public SwerveModuleState getState() {
-        return new SwerveModuleState(m_driveEncoder.getVelocity() * 60 * Constants.k_RPStoMPS, Rotation2d.fromDegrees(112/360*(m_angleEncoder.getPosition() - m_azimuthZero)));
+        return new SwerveModuleState(m_driveEncoder.getVelocity() * 60 * Constants.k_RPStoMPS, Rotation2d.fromDegrees(360.0/112*(m_angleEncoder.getPosition() - m_azimuthZero)));
     }
 
     @Override

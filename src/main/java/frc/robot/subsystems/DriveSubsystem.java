@@ -40,6 +40,8 @@ public class DriveSubsystem extends SubsystemBase {
   CANSparkMax m_BRAngleMotor = new CANSparkMax(6, MotorType.kBrushless);
   CANEncoder m_BRAngleEncoder = m_BRAngleMotor.getEncoder();
 
+  SwerveModule[] m_wheels = new SwerveModule[4];
+
   WheelWrapper m_TLWheel = new WheelWrapper(m_TLDriveMotor, m_TLAngleMotor, m_TLDriveEncoder, m_TLAngleEncoder,
       Constants.k_TLLocation);
   WheelWrapper m_TRWheel = new WheelWrapper(m_TRDriveMotor, m_TRAngleMotor, m_TRDriveEncoder, m_TRAngleEncoder,
@@ -61,27 +63,26 @@ public class DriveSubsystem extends SubsystemBase {
   // }
 
   public void setPower(double power) {
-    // m_TLAngleMotor.set(power);
-    m_TRAngleMotor.set(power);
-    // m_BLAngleMotor.set(power);
-    // m_BRAngleMotor.set(power);
+    m_TLDriveMotor.set(power);
+    m_TRDriveMotor.set(power);
+    m_BLDriveMotor.set(power);
+    m_BRDriveMotor.set(power);
   }
 
   public void setAngle(double angle) {
-    m_TLWheel.storeAzimuthZeroReference();
+    // m_TLWheel.storeAzimuthZeroReference();
     m_TLWheel.setWheelAngle(angle);
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    m_TLWheel.periodic();
   }
 
   public SwerveDrive getSwerve() {
-    SwerveModule[] wheels = new SwerveModule[4];
 
-    wheels[0] = (SwerveModule) new WheelWrapper(m_TLDriveMotor, m_TLAngleMotor, m_TLDriveEncoder, m_TLAngleEncoder, Constants.k_TLLocation);
+    m_wheels[0] = m_TLWheel;
 
-    return new SwerveDrive(wheels);
+    return new SwerveDrive(m_wheels);
   }
 }
