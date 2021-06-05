@@ -6,9 +6,12 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.SetAzimuthZero;
 import frc.robot.commands.SetWheelAngleCommand;
 import frc.robot.commands.TeleopDriveCommand;
 import frc.robot.commands.TestMaxSpeedCommand;
@@ -33,6 +36,9 @@ public class RobotContainer {
   public RobotContainer() {
     // m_driveSubsystem.setDefaultCommand(new TeleopDriveCommand(m_driveSubsystem, () -> m_stick.getY(), () -> m_stick.getX(), () -> m_stick.getZ()));
     configureButtonBindings();
+
+    SmartDashboard.putData("Set Zero Refrences", new SetAzimuthZero(m_driveSubsystem));
+    SmartDashboard.putData("PDP", new PowerDistributionPanel());
   }
 
   /**

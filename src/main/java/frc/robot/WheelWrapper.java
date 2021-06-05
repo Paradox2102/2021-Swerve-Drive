@@ -12,6 +12,7 @@ import org.strykeforce.swerve.SwerveModule;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class WheelWrapper implements SwerveModule {
     
@@ -24,16 +25,21 @@ public class WheelWrapper implements SwerveModule {
     private double m_azimuthZero = 0.0;
     private double k_deadZone = 1.0;
     private double m_angle = 0;
+    private String m_name;
+    
+    final String m_smartDashboardName;
 
     private double k_p = 0.01;
 
     Translation2d m_location; // (distance from center, angle)
 
-    public WheelWrapper(CANSparkMax driveMotor, CANSparkMax angleMotor, CANEncoder driveEncoder, CANEncoder angleEncoder, Translation2d location) {
+    public WheelWrapper(String name, CANSparkMax driveMotor, CANSparkMax angleMotor, CANEncoder driveEncoder, CANEncoder angleEncoder, Translation2d location) {
         m_driveMotor = driveMotor;
         m_angleMotor = angleMotor;
         m_driveEncoder = driveEncoder;
         m_angleEncoder = angleEncoder;
+        m_name = name;
+        m_smartDashboardName = m_name + " Azimuth Zero";
 
         m_location = location;
     }
@@ -103,12 +109,17 @@ public class WheelWrapper implements SwerveModule {
 
     @Override
     public void storeAzimuthZeroReference() {
+        SmartDashboard.setPersistent(m_smartDashboardName);
+
         m_azimuthZero = m_angleEncoder.getPosition();
-        // SmartDashboard.putNumber("Azimuth Zero", m_angleEncoder.getPosition());
+        SmartDashboard.putNumber(m_smartDashboardName, m_angleEncoder.getPosition());
+        // System.out.println(SmartDashboard.getNumber(m_smartDashboardName, 0));
+        SmartDashboard.setPersistent(m_smartDashboardName);
     }
 
     @Override
     public void loadAndSetAzimuthZeroReference() {
-        // m_angleEncoder.setPosition(SmartDashboard.getNumber("Azimuth Zero", 0));
+        m_azimuthZero = SmartDashboard.getNumber(m_smartDashboardName, 0);
+        SmartDashboard.putNumber(m_smartDashboardName, m_azimuthZero);
     }
 }
