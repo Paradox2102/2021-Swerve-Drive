@@ -20,16 +20,24 @@ public final class Constants {
     public static double k_robotLength = 1.0;
     public static double k_robotWidth = 1.0;
 
-    public static double k_maxSpeed = 20.0;
+    public static double k_maxSpeed = 3.846;
 
-    // Motor Values
+    // PID Values
+    public static double k_TLF = (2500.0/2900) / 5000;
+    public static double k_TRF = (2500.0/2900) / 5000;
+    public static double k_BLF = (2500.0/2800) / 5000;
+    public static double k_BRF = (2500.0/2825) / 5000;
+
+    public static double k_P = 0.00002;
+    public static double k_I = 0.0000005;
+    public static double k_iZone = 150;
 
     // Wheel locations
-    public static Translation2d k_TLLocation = new Translation2d(0, 0);
-    public static Translation2d k_TRLocation = new Translation2d(0, 0);
-    public static Translation2d k_BLLocation = new Translation2d(0, 0);
-    public static Translation2d k_BRLocation = new Translation2d(0, 0);
+    public static Translation2d k_TLLocation = new Translation2d(-0.245, +0.245);
+    public static Translation2d k_TRLocation = new Translation2d(+0.245, +0.245);
+    public static Translation2d k_BLLocation = new Translation2d(-0.245, -0.245);
+    public static Translation2d k_BRLocation = new Translation2d(+0.245, -0.245);
 
     // Local Conversions
-    public static double k_RPStoMPS = 1.0;
+    public static double k_RPMtoMPS = (4.616/100)/60;
 }

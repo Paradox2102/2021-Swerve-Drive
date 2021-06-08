@@ -7,12 +7,15 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class TestMaxSpeedCommand extends CommandBase {
+public class DriveByDistanceCommand extends CommandBase {
 
   DriveSubsystem m_driveSubsystem;
+  double m_rotations;
+  double m_initValue;
 
-  public TestMaxSpeedCommand(DriveSubsystem driveSubsystem) {
+  public DriveByDistanceCommand(DriveSubsystem driveSubsystem, double rotations) {
     m_driveSubsystem = driveSubsystem;
+    m_rotations = rotations;
 
     addRequirements(driveSubsystem);
   }
@@ -20,23 +23,25 @@ public class TestMaxSpeedCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_initValue = m_driveSubsystem.getTLEncoderValue();
     m_driveSubsystem.setSpeed(1200);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_driveSubsystem.setPower(0);
+    m_driveSubsystem.setSpeed(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return Math.abs(m_driveSubsystem.getTLEncoderValue() - m_initValue) > m_rotations;
   }
 }

@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
 
 import org.strykeforce.swerve.SwerveModule;
 
@@ -74,7 +75,7 @@ public class WheelWrapper implements SwerveModule {
     }
 
     public void setSpeed(double speed) {
-        m_driveMotor.set(speed / 60 / Constants.k_RPStoMPS);
+        m_driveMotor.getPIDController().setReference(speed / Constants.k_RPMtoMPS, ControlType.kVelocity);
     }
 
     // public double normalize(double value) {
@@ -93,7 +94,7 @@ public class WheelWrapper implements SwerveModule {
 
     @Override
     public SwerveModuleState getState() {
-        return new SwerveModuleState(m_driveEncoder.getVelocity() * 60 * Constants.k_RPStoMPS, Rotation2d.fromDegrees(360.0/112*(m_angleEncoder.getPosition() - m_azimuthZero)));
+        return new SwerveModuleState(m_driveEncoder.getVelocity() * Constants.k_RPMtoMPS, Rotation2d.fromDegrees(360.0/112*(m_angleEncoder.getPosition() - m_azimuthZero)));
     }
 
     @Override
