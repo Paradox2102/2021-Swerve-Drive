@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class WheelWrapper implements SwerveModule {
-    
+
     CANSparkMax m_driveMotor;
     CANEncoder m_driveEncoder;
 
@@ -27,14 +27,15 @@ public class WheelWrapper implements SwerveModule {
     private double k_deadZone = 1.0;
     private double m_angle = 0;
     private String m_name;
-    
+
     final String m_smartDashboardName;
 
     private double k_p = 0.01;
 
     Translation2d m_location; // (distance from center, angle)
 
-    public WheelWrapper(String name, CANSparkMax driveMotor, CANSparkMax angleMotor, CANEncoder driveEncoder, CANEncoder angleEncoder, Translation2d location) {
+    public WheelWrapper(String name, CANSparkMax driveMotor, CANSparkMax angleMotor, CANEncoder driveEncoder,
+            CANEncoder angleEncoder, Translation2d location) {
         m_driveMotor = driveMotor;
         m_angleMotor = angleMotor;
         m_driveEncoder = driveEncoder;
@@ -62,12 +63,9 @@ public class WheelWrapper implements SwerveModule {
     public double normalizeAngle(double angle) {
         double a = angle % 360;
 
-        if (a > 180)
-        {
+        if (a > 180) {
             a -= 360;
-        }
-        else if (a < -180)
-        {
+        } else if (a < -180) {
             a += 360;
         }
 
@@ -79,7 +77,7 @@ public class WheelWrapper implements SwerveModule {
     }
 
     // public double normalize(double value) {
-    //     return (value+180)%360-180;
+    // return (value+180)%360-180;
     // }
 
     @Override
@@ -89,18 +87,20 @@ public class WheelWrapper implements SwerveModule {
 
     @Override
     public Translation2d getWheelLocationMeters() {
-        return m_location; 
+        return m_location;
     }
 
     @Override
     public SwerveModuleState getState() {
-        return new SwerveModuleState(m_driveEncoder.getVelocity() * Constants.k_RPMtoMPS, Rotation2d.fromDegrees(360.0/112*(m_angleEncoder.getPosition() - m_azimuthZero)));
+        return new SwerveModuleState(m_driveEncoder.getVelocity() * Constants.k_RPMtoMPS,
+                Rotation2d.fromDegrees(360.0 / 112 * (m_angleEncoder.getPosition() - m_azimuthZero)));
     }
 
     @Override
     public void setDesiredState(SwerveModuleState desiredState, boolean isDriveOpenLoop) {
-        setWheelAngle(SwerveModuleState.optimize(desiredState, getState().angle).angle.getDegrees());
-        setSpeed(desiredState.speedMetersPerSecond);
+        SwerveModuleState optimizedState = SwerveModuleState.optimize(desiredState, getState().angle);
+        setWheelAngle(optimizedState.angle.getDegrees());
+        setSpeed(optimizedState.speedMetersPerSecond);
     }
 
     @Override
