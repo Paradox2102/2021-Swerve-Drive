@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.sensors.PigeonIMU;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
@@ -47,6 +48,8 @@ public class DriveSubsystem extends SubsystemBase {
   CANPIDController m_BRController;
   CANSparkMax m_BRAngleMotor = new CANSparkMax(6, MotorType.kBrushless);
   CANEncoder m_BRAngleEncoder = m_BRAngleMotor.getEncoder();
+
+  PigeonIMU m_gryo = new PigeonIMU(0);
 
   SwerveModule[] m_wheels = new SwerveModule[4];
 

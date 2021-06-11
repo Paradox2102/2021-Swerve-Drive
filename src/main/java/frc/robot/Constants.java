@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.geometry.Translation2d;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static double k_deadband = 0.05;
+    public static double k_deadband = 0.1;
     
     public static double k_robotLength = 1.0;
     public static double k_robotWidth = 1.0;
@@ -33,10 +33,10 @@ public final class Constants {
     public static double k_iZone = 150;
 
     // Wheel locations
-    public static Translation2d k_TLLocation = new Translation2d(-0.245, +0.245);
+    public static Translation2d k_TLLocation = new Translation2d(+0.245, -0.245);
     public static Translation2d k_TRLocation = new Translation2d(+0.245, +0.245);
     public static Translation2d k_BLLocation = new Translation2d(-0.245, -0.245);
-    public static Translation2d k_BRLocation = new Translation2d(+0.245, -0.245);
+    public static Translation2d k_BRLocation = new Translation2d(-0.245, +0.245);
 
     // Local Conversions
     public static double k_RPMtoMPS = (4.616/100)/60;
