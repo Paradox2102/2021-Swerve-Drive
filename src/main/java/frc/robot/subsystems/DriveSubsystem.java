@@ -15,9 +15,11 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import org.strykeforce.swerve.SwerveDrive;
 import org.strykeforce.swerve.SwerveModule;
 
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.GyroWrapper;
 import frc.robot.WheelWrapper;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -49,7 +51,7 @@ public class DriveSubsystem extends SubsystemBase {
   CANSparkMax m_BRAngleMotor = new CANSparkMax(6, MotorType.kBrushless);
   CANEncoder m_BRAngleEncoder = m_BRAngleMotor.getEncoder();
 
-  PigeonIMU m_gryo = new PigeonIMU(0);
+  PigeonIMU m_pigeon = new PigeonIMU(0);
 
   SwerveModule[] m_wheels = new SwerveModule[4];
 
@@ -61,6 +63,8 @@ public class DriveSubsystem extends SubsystemBase {
       Constants.k_BLLocation);
   WheelWrapper m_BRWheel = new WheelWrapper("BR", m_BRDriveMotor, m_BRAngleMotor, m_BRDriveEncoder, m_BRAngleEncoder,
       Constants.k_BRLocation);
+
+  Gyro m_gyro = new GyroWrapper(m_pigeon);
 
   SwerveDrive m_swerve;
 
@@ -82,6 +86,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_BLWheel.loadAndSetAzimuthZeroReference();
 
     m_swerve = getSwerve();
+    m_gyro.reset();
   }
 
   public void drive(double forward, double strafe, double yaw) {
@@ -157,6 +162,8 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Velocity TR", m_TRWheel.getState().speedMetersPerSecond);
     SmartDashboard.putNumber("Velocity BL", m_BLWheel.getState().speedMetersPerSecond);
     SmartDashboard.putNumber("Velocity BR", m_BRWheel.getState().speedMetersPerSecond);
+
+    // SmartDashboard.putNumber("Gyro", m_gyro.getAngle());
   }
 
   public SwerveDrive getSwerve() {
@@ -166,6 +173,6 @@ public class DriveSubsystem extends SubsystemBase {
     m_wheels[2] = m_BLWheel;
     m_wheels[3] = m_BRWheel;
 
-    return new SwerveDrive(m_wheels);
+    return new SwerveDrive(m_gyro, m_wheels);
   }
 }

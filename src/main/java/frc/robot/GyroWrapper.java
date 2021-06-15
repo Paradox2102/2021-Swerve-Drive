@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.ctre.phoenix.sensors.PigeonIMU;
+import com.ctre.phoenix.sensors.PigeonIMU.CalibrationMode;
 
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 
@@ -19,14 +20,12 @@ public class GyroWrapper implements Gyro {
 
     @Override
     public void close() throws Exception {
-        // TODO Auto-generated method stub
         
     }
 
     @Override
     public void calibrate() {
-        // TODO Auto-generated method stub
-        
+        m_gyro.enterCalibrationMode(CalibrationMode.Temperature);
     }
 
     @Override
