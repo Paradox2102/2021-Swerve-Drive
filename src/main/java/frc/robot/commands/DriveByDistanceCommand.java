@@ -23,7 +23,7 @@ public class DriveByDistanceCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_initValue = m_driveSubsystem.getTLEncoderValue();
+    m_initValue = m_driveSubsystem.getFLEncoderValue();
     m_driveSubsystem.setSpeed(1200);
   }
 
@@ -42,6 +42,6 @@ public class DriveByDistanceCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(m_driveSubsystem.getTLEncoderValue() - m_initValue) > m_rotations;
+    return Math.abs(m_driveSubsystem.getFLEncoderValue() - m_initValue) > m_rotations;
   }
 }

@@ -23,8 +23,8 @@ public final class Constants {
     public static double k_maxSpeed = 3.846;
 
     // PID Values
-    public static double k_TLF = (2500.0/2900) / 5000;
-    public static double k_TRF = (2500.0/2900) / 5000;
+    public static double k_FLF = (2500.0/2900) / 5000;
+    public static double k_FRF = (2500.0/2900) / 5000;
     public static double k_BLF = (2500.0/2800) / 5000;
     public static double k_BRF = (2500.0/2825) / 5000;
 
@@ -33,8 +33,8 @@ public final class Constants {
     public static double k_iZone = 150;
 
     // Wheel locations
-    public static Translation2d k_TLLocation = new Translation2d(+0.245, -0.245);
-    public static Translation2d k_TRLocation = new Translation2d(+0.245, +0.245);
+    public static Translation2d k_FLLocation = new Translation2d(+0.245, -0.245);
+    public static Translation2d k_FRLocation = new Translation2d(+0.245, +0.245);
     public static Translation2d k_BLLocation = new Translation2d(-0.245, -0.245);
     public static Translation2d k_BRLocation = new Translation2d(-0.245, +0.245);
 

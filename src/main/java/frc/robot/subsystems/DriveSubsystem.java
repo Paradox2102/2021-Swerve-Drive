@@ -16,7 +16,6 @@ import org.strykeforce.swerve.SwerveDrive;
 import org.strykeforce.swerve.SwerveModule;
 
 import edu.wpi.first.wpilibj.interfaces.Gyro;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.GyroWrapper;
@@ -27,17 +26,17 @@ public class DriveSubsystem extends SubsystemBase {
   double k_robotLength = Constants.k_robotLength;
   double k_robotWidth = Constants.k_robotWidth;
 
-  CANSparkMax m_TLDriveMotor = new CANSparkMax(1, MotorType.kBrushless);
-  CANEncoder m_TLDriveEncoder = m_TLDriveMotor.getEncoder();
-  CANPIDController m_TLController;
-  CANSparkMax m_TLAngleMotor = new CANSparkMax(2, MotorType.kBrushless);
-  CANEncoder m_TLAngleEncoder = m_TLAngleMotor.getEncoder();
+  CANSparkMax m_FLDriveMotor = new CANSparkMax(1, MotorType.kBrushless);
+  CANEncoder m_FLDriveEncoder = m_FLDriveMotor.getEncoder();
+  CANPIDController m_FLController;
+  CANSparkMax m_FLAngleMotor = new CANSparkMax(2, MotorType.kBrushless);
+  CANEncoder m_FLAngleEncoder = m_FLAngleMotor.getEncoder();
 
-  CANSparkMax m_TRDriveMotor = new CANSparkMax(3, MotorType.kBrushless);
-  CANEncoder m_TRDriveEncoder = m_TRDriveMotor.getEncoder();
-  CANPIDController m_TRController;
-  CANSparkMax m_TRAngleMotor = new CANSparkMax(4, MotorType.kBrushless);
-  CANEncoder m_TRAngleEncoder = m_TRAngleMotor.getEncoder();
+  CANSparkMax m_FRDriveMotor = new CANSparkMax(3, MotorType.kBrushless);
+  CANEncoder m_FRDriveEncoder = m_FRDriveMotor.getEncoder();
+  CANPIDController m_FRController;
+  CANSparkMax m_FRAngleMotor = new CANSparkMax(4, MotorType.kBrushless);
+  CANEncoder m_FRAngleEncoder = m_FRAngleMotor.getEncoder();
 
   CANSparkMax m_BLDriveMotor = new CANSparkMax(7, MotorType.kBrushless);
   CANEncoder m_BLDriveEncoder = m_BLDriveMotor.getEncoder();
@@ -55,10 +54,10 @@ public class DriveSubsystem extends SubsystemBase {
 
   SwerveModule[] m_wheels = new SwerveModule[4];
 
-  WheelWrapper m_TLWheel = new WheelWrapper("TL", m_TLDriveMotor, m_TLAngleMotor, m_TLDriveEncoder, m_TLAngleEncoder,
-      Constants.k_TLLocation);
-  WheelWrapper m_TRWheel = new WheelWrapper("TR", m_TRDriveMotor, m_TRAngleMotor, m_TRDriveEncoder, m_TRAngleEncoder,
-      Constants.k_TRLocation);
+  WheelWrapper m_FLWheel = new WheelWrapper("FL", m_FLDriveMotor, m_FLAngleMotor, m_FLDriveEncoder, m_FLAngleEncoder,
+      Constants.k_FLLocation);
+  WheelWrapper m_FRWheel = new WheelWrapper("FR", m_FRDriveMotor, m_FRAngleMotor, m_FRDriveEncoder, m_FRAngleEncoder,
+      Constants.k_FRLocation);
   WheelWrapper m_BLWheel = new WheelWrapper("BL", m_BLDriveMotor, m_BLAngleMotor, m_BLDriveEncoder, m_BLAngleEncoder,
       Constants.k_BLLocation);
   WheelWrapper m_BRWheel = new WheelWrapper("BR", m_BRDriveMotor, m_BRAngleMotor, m_BRDriveEncoder, m_BRAngleEncoder,
@@ -70,18 +69,18 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
-    m_TLController = m_TLDriveMotor.getPIDController();
-    m_TRController = m_TRDriveMotor.getPIDController();
+    m_FLController = m_FLDriveMotor.getPIDController();
+    m_FRController = m_FRDriveMotor.getPIDController();
     m_BLController = m_BLDriveMotor.getPIDController();
     m_BRController = m_BRDriveMotor.getPIDController();
 
-    setPID(m_TLController, Constants.k_TLF, Constants.k_P, Constants.k_I, Constants.k_iZone);
-    setPID(m_TRController, Constants.k_TRF, Constants.k_P, Constants.k_I, Constants.k_iZone);
+    setPID(m_FLController, Constants.k_FLF, Constants.k_P, Constants.k_I, Constants.k_iZone);
+    setPID(m_FRController, Constants.k_FRF, Constants.k_P, Constants.k_I, Constants.k_iZone);
     setPID(m_BLController, Constants.k_BLF, Constants.k_P, Constants.k_I, Constants.k_iZone);
     setPID(m_BRController, Constants.k_BRF, Constants.k_P, Constants.k_I, Constants.k_iZone);
 
-    m_TLWheel.loadAndSetAzimuthZeroReference();
-    m_TRWheel.loadAndSetAzimuthZeroReference();
+    m_FLWheel.loadAndSetAzimuthZeroReference();
+    m_FRWheel.loadAndSetAzimuthZeroReference();
     m_BRWheel.loadAndSetAzimuthZeroReference();
     m_BLWheel.loadAndSetAzimuthZeroReference();
 
@@ -104,72 +103,67 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void setBrakeMode(boolean isBreak) {
     if(isBreak) {
-      m_TLDriveMotor.setIdleMode(IdleMode.kBrake);
-      m_TRDriveMotor.setIdleMode(IdleMode.kBrake);
+      m_FLDriveMotor.setIdleMode(IdleMode.kBrake);
+      m_FRDriveMotor.setIdleMode(IdleMode.kBrake);
       m_BLDriveMotor.setIdleMode(IdleMode.kBrake);
       m_BRDriveMotor.setIdleMode(IdleMode.kBrake);
     } else {
-      m_TLDriveMotor.setIdleMode(IdleMode.kCoast);
-      m_TRDriveMotor.setIdleMode(IdleMode.kCoast);
+      m_FLDriveMotor.setIdleMode(IdleMode.kCoast);
+      m_FRDriveMotor.setIdleMode(IdleMode.kCoast);
       m_BLDriveMotor.setIdleMode(IdleMode.kCoast);
       m_BRDriveMotor.setIdleMode(IdleMode.kCoast);
     }
   }
 
   public void setAllAzimuthZero() {
-    m_TLWheel.storeAzimuthZeroReference();
-    m_TRWheel.storeAzimuthZeroReference();
+    m_FLWheel.storeAzimuthZeroReference();
+    m_FRWheel.storeAzimuthZeroReference();
     m_BRWheel.storeAzimuthZeroReference();
     m_BLWheel.storeAzimuthZeroReference();
   }
 
-  public double getTLEncoderValue() {
-    return m_TLDriveEncoder.getPosition();
+  public double getFLEncoderValue() {
+    return m_FLDriveEncoder.getPosition();
   }
 
   public void setSpeed(double speed) {
-    m_TLController.setReference(speed, ControlType.kVelocity);
-    m_TRController.setReference(speed, ControlType.kVelocity);
+    m_FLController.setReference(speed, ControlType.kVelocity);
+    m_FRController.setReference(speed, ControlType.kVelocity);
     m_BLController.setReference(speed, ControlType.kVelocity);
     m_BRController.setReference(speed, ControlType.kVelocity);
   }
 
   public void setPower(double power) {
-    m_TLController.setReference(power, ControlType.kDutyCycle);
-    m_TRController.setReference(power, ControlType.kDutyCycle);
+    m_FLController.setReference(power, ControlType.kDutyCycle);
+    m_FRController.setReference(power, ControlType.kDutyCycle);
     m_BLController.setReference(power, ControlType.kDutyCycle);
     m_BRController.setReference(power, ControlType.kDutyCycle);
   }
 
   public void setAngle(double angle) {
-    // m_TLWheel.storeAzimuthZeroReference();
-    m_TLWheel.setWheelAngle(angle);
+    // m_FLWheel.storeAzimuthZeroReference();
+    m_FLWheel.setWheelAngle(angle);
   }
 
   @Override
   public void periodic() {
-    m_TLWheel.periodic();
-    m_TRWheel.periodic();
+    m_FLWheel.periodic();
+    m_FRWheel.periodic();
     m_BLWheel.periodic();
     m_BRWheel.periodic();
 
-    // double[] velocity = { m_TLWheel.getState().speedMetersPerSecond, m_TRWheel.getState().speedMetersPerSecond,
-    //     m_BLWheel.getState().speedMetersPerSecond, m_BRWheel.getState().speedMetersPerSecond};
-
-    // SmartDashboard.putNumberArray("Velocity", velocity);
-
-    SmartDashboard.putNumber("Velocity TL", m_TLWheel.getState().speedMetersPerSecond);
-    SmartDashboard.putNumber("Velocity TR", m_TRWheel.getState().speedMetersPerSecond);
-    SmartDashboard.putNumber("Velocity BL", m_BLWheel.getState().speedMetersPerSecond);
-    SmartDashboard.putNumber("Velocity BR", m_BRWheel.getState().speedMetersPerSecond);
+    // SmartDashboard.putNumber("Velocity FL", m_FLWheel.getState().speedMetersPerSecond);
+    // SmartDashboard.putNumber("Velocity FR", m_FRWheel.getState().speedMetersPerSecond);
+    // SmartDashboard.putNumber("Velocity BL", m_BLWheel.getState().speedMetersPerSecond);
+    // SmartDashboard.putNumber("Velocity BR", m_BRWheel.getState().speedMetersPerSecond);
 
     // SmartDashboard.putNumber("Gyro", m_gyro.getAngle());
   }
 
   public SwerveDrive getSwerve() {
 
-    m_wheels[0] = m_TLWheel;
-    m_wheels[1] = m_TRWheel;
+    m_wheels[0] = m_FLWheel;
+    m_wheels[1] = m_FRWheel;
     m_wheels[2] = m_BLWheel;
     m_wheels[3] = m_BRWheel;
 
