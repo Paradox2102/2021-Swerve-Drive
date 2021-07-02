@@ -16,6 +16,7 @@ public class ResetGyro extends InstantCommand {
   public ResetGyro(DriveSubsystem driveSubsystem) {
     m_driveSubsystem = driveSubsystem;
 
+    addRequirements(driveSubsystem);
   }
 
   // Called when the command is initially scheduled.
