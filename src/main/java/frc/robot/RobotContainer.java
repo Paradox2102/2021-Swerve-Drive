@@ -16,6 +16,7 @@ import frc.robot.commands.DriveByDistanceCommand;
 import frc.robot.commands.ResetGyro;
 import frc.robot.commands.SetAzimuthZero;
 import frc.robot.commands.SetWheelAngleCommand;
+import frc.robot.commands.SwapController;
 import frc.robot.commands.TeleopDriveCommand;
 import frc.robot.commands.TestMaxSpeedCommand;
 import frc.robot.subsystems.DriveSubsystem;
@@ -31,7 +32,7 @@ public class RobotContainer {
   DriveSubsystem m_driveSubsystem = new DriveSubsystem();
 
   Joystick m_stick = new Joystick(0);
-  XboxController m_controller = new XboxController(1);
+  XboxController m_controller = new XboxController(0);
 
   // JoystickButton m_testMaxSpeed = new JoystickButton(m_stick, 2);
   // JoystickButton m_driveRotations = new JoystickButton(m_stick, 4);
@@ -43,8 +44,9 @@ public class RobotContainer {
     // m_driveSubsystem.setDefaultCommand(new TeleopDriveCommand(m_driveSubsystem, () -> m_controller.getY(Hand.kLeft), () -> m_controller.getX(Hand.kLeft), () -> m_controller.getX(Hand.kRight)));
     configureButtonBindings();
 
-    SmartDashboard.putBoolean("Controller", false);
+    SmartDashboard.putBoolean("Using Controller", false);
     SmartDashboard.putData("Reset Gyro", new ResetGyro(m_driveSubsystem));
+    SmartDashboard.putData("Switch Controller", new SwapController());
     SmartDashboard.putData("Set Zero Refrences", new SetAzimuthZero(m_driveSubsystem));
     SmartDashboard.putData("PDP", new PowerDistributionPanel());
   }
@@ -62,7 +64,7 @@ public class RobotContainer {
   }
 
   public void periodic() {
-    if(SmartDashboard.getBoolean("Controller", false)) {
+    if(SmartDashboard.getBoolean("Using Controller", false)) {
       m_driveSubsystem.setDefaultCommand(new TeleopDriveCommand(m_driveSubsystem, () -> m_controller.getY(Hand.kLeft),
           () -> m_controller.getX(Hand.kLeft), () -> m_controller.getX(Hand.kRight)));
     } else {
