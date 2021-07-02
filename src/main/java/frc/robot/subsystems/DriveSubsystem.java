@@ -85,7 +85,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_BLWheel.loadAndSetAzimuthZeroReference();
 
     m_swerve = getSwerve();
-    m_gyro.reset();
+   resetGyro();
   }
 
   public void drive(double forward, double strafe, double yaw) {
@@ -99,6 +99,10 @@ public class DriveSubsystem extends SubsystemBase {
     controller.setIZone(iZone);
     controller.setD(0);
     controller.setOutputRange(-1, 1);
+  }
+
+  public void resetGyro() {
+    m_gyro.reset();
   }
 
   public void setBrakeMode(boolean isBreak) {
